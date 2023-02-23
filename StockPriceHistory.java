@@ -9,6 +9,7 @@ public class StockPriceHistory
 {
 
     private final String TICKER = "GOOG";
+    private String dates;
     
     /**
      * Retrieve the stock price data
@@ -16,7 +17,14 @@ public class StockPriceHistory
     public void run() {
         try {
             Stock stock = YahooFinance.get(TICKER, true);
-            System.out.println(stock);
+            
+            for (int i = 365; i > 0; i--) {
+                Calendar from = Calendar.getInstance();
+                Calendar to = Calendar.getInstance();
+                from.add(Calendar.DAY, -i);
+                Stock google = YahooFinance.get("GOOG", from, to);
+                System.out.println(google);
+            }
         } catch (Exception e) {
             System.out.println("Error in stock call");    
         }
