@@ -4,8 +4,11 @@ import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.*;
 
 import java.util.Calendar;
-import java.util.Map;
 import java.util.List; 
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
+import java.io.FileWriter;
 
 /**
  * Retrieve historical stock prices
@@ -21,24 +24,22 @@ public class StockPriceHistory
      */
     public void run() {
         try {
-            Stock stock = YahooFinance.get(TICKER, true);
             
             Calendar from = Calendar.getInstance();
             Calendar to = Calendar.getInstance();
             from.add(Calendar.YEAR, -1);
-            
-            int year = from.get(Calendar.YEAR);
-            int month = from.get(Calendar.MONTH)+1;
-            int day = from.get(Calendar.DATE);
-            String monthStr = (month < 10) ? "0"+month : month+"";
-            String dayStr = (day < 10) ? "0"+day : day+"";
-            String dateStr = year+"-"+monthStr+"-"+dayStr;
-            
-            Stock google = YahooFinance.get("GOOG", from, to, Interval.WEEKLY);
-            System.out.println(""+dateStr+""+google.getHistory()+"");
  
             Stock google2 = YahooFinance.get("GOOG");
             List<HistoricalQuote> googleHistQuotes = google2.getHistory(from, to, Interval.DAILY);
+            Map<String,String> datas = new HashMap<String,String>();
+            datas.put("GOOG", googleHistQuotes);
+            
+            for (int i=0;i < googleHistQuotes.size();i++) {
+                datas.put("GOOG", googleHistQuotes.get(i));
+            }
+
+            System.out.println(datas);
+            
         } catch (Exception e) {
             System.out.println("Error in stock call");    
         }
